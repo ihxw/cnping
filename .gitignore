@@ -1,0 +1,30 @@
+# 忽略编译产物
+
+*.exe
+cnping
+cnping-*
+
+# 忽略测试结果
+tcp-ping-results-*.md
+tcp-ping-results-*.txt
+tcp-ping-results-*.csv
+
+# 忽略临时文件
+*.log
+*.tmp
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+*.test
+*.out
+go.sum

@@ -10,6 +10,8 @@ PING_COUNT=10
 TIMEOUT=5
 MAP_FILE="map.json"
 MAP_URL="https://raw.githubusercontent.com/ihxw/cnping/main/map.json"
+TEST_MODE=true  # Set to true to test only first 3 provinces
+TEST_PROVINCE_COUNT=3
 
 # Colors
 RED='\033[0;31m'
@@ -149,16 +151,16 @@ check_dependencies() {
 # Function to download map.json if not exists
 download_map_file() {
     if [ ! -f "$MAP_FILE" ]; then
-        print_color "$YELLOW" "Downloading map.json from GitHub..."
+        print_color "$YELLOW" "正在从 GitHub 下载 map.json..."
         if command -v curl &> /dev/null; then
             curl -s -o "$MAP_FILE" "$MAP_URL"
         elif command -v wget &> /dev/null; then
             wget -q -O "$MAP_FILE" "$MAP_URL"
         else
-            print_color "$RED" "Error: Neither curl nor wget is available"
+            print_color "$RED" "错误: 未找到 curl 或 wget"
             exit 1
         fi
-        print_color "$GREEN" "Downloaded map.json successfully"
+        print_color "$GREEN" "下载 map.json 成功"
     fi
 }
 
@@ -193,11 +195,12 @@ test_endpoint() {
     local host=$(echo "$address" | cut -d':' -f1)
     local port=$(echo "$address" | cut -d':' -f2)
     
-    print_color "$CYAN" "\n[$isp] Testing $address"
-    
     local latencies=()
     local success_count=0
     local fail_count=0
+    
+    # Show testing message
+    echo -ne "  [$isp] 测试中..."
     
     for i in $(seq 1 $PING_COUNT); do
         latency=$(tcp_ping "$host" "$port")
@@ -205,15 +208,17 @@ test_endpoint() {
         if [ "$latency" -ne -1 ]; then
             latencies+=($latency)
             success_count=$((success_count + 1))
-            print_color "$GREEN" "  [$i/$PING_COUNT] $address - ${latency}ms"
         else
             fail_count=$((fail_count + 1))
-            print_color "$RED" "  [$i/$PING_COUNT] $address - Failed/Timeout"
         fi
         
-        # Small delay between pings
+        # Show progress
+        echo -ne "\r  [$isp] 测试中... $i/$PING_COUNT"
         sleep 0.1
     done
+    
+    # Clear progress line
+    echo -ne "\r\033[K"
     
     # Calculate statistics
     if [ ${#latencies[@]} -gt 0 ]; then
@@ -232,97 +237,79 @@ test_endpoint() {
         done
         
         local avg=$(echo "scale=2; $sum / ${#latencies[@]}" | bc)
-        local success_rate=$(echo "scale=2; $success_count * 100 / $PING_COUNT" | bc)
+        local loss_rate=$(echo "scale=2; $fail_count * 100 / $PING_COUNT" | bc)
         
-        print_color "$GREEN" "  Avg: ${avg}ms | Min: ${min}ms | Max: ${max}ms | Success: ${success_rate}%"
-        
-        # Output CSV line
-        echo "$province,$isp,$address,$avg,$min,$max,$success_rate" >> "$RESULT_FILE"
+        # Return results as a string
+        echo "$province|$isp|$min|$max|$avg|$loss_rate"
     else
-        print_color "$RED" "  All connection attempts failed"
+        local loss_rate="100.00"
+        echo "$province|$isp|-|-|-|$loss_rate"
     fi
 }
 
-# Function to generate TXT and Markdown reports
-generate_reports() {
+# Function to generate markdown report
+generate_markdown_report() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     
-    # Generate TXT report
     {
-        echo "========================================"
-        echo "  TCP Ping Test Results"
-        echo "  Generated: $timestamp"
-        echo "========================================"
+        echo "# TCP Ping 测试结果"
         echo ""
-        echo "Top 10 Fastest Nodes:"
-        echo "----------------------------------------"
-        (head -n 1 "$RESULT_FILE" && tail -n +2 "$RESULT_FILE" | sort -t',' -k4 -n | head -n 10) | column -t -s','
+        echo "**生成时间:** $timestamp"
         echo ""
-        echo "Top 10 Slowest Nodes:"
-        echo "----------------------------------------"
-        (head -n 1 "$RESULT_FILE" && tail -n +2 "$RESULT_FILE" | sort -t',' -k4 -n | tail -n 10) | column -t -s','
-        echo ""
-        echo "All Results (sorted by latency):"
-        echo "----------------------------------------"
-        (head -n 1 "$RESULT_FILE" && tail -n +2 "$RESULT_FILE" | sort -t',' -k4 -n) | column -t -s','
-    } > "$TXT_FILE"
-    
-    # Generate Markdown report
-    {
-        echo "# TCP Ping Test Results"
-        echo ""
-        echo "**Generated:** $timestamp"
-        echo ""
-        echo "## Top 10 Fastest Nodes"
-        echo ""
-        echo "| Province | ISP | Address | Avg(ms) | Min(ms) | Max(ms) | Success(%) |"
-        echo "|----------|-----|---------|---------|---------|---------|------------|"
-        tail -n +2 "$RESULT_FILE" | sort -t',' -k4 -n | head -n 10 | while IFS=',' read -r province isp address avg min max success; do
-            echo "| $province | $isp | $address | $avg | $min | $max | $success |"
+        
+        # Read all data and group by province
+        declare -A province_lines
+        local provinces=()
+        
+        while IFS='|' read -r province isp min max avg loss; do
+            # Track province order
+            if [[ ! " ${provinces[@]} " =~ " ${province} " ]]; then
+                provinces+=("$province")
+            fi
+            
+            # Append line to province
+            if [ -z "${province_lines[$province]}" ]; then
+                province_lines[$province]="| $isp | $min | $max | $avg | $loss |"
+            else
+                province_lines[$province]="${province_lines[$province]}"$'\n'"| $isp | $min | $max | $avg | $loss |"
+            fi
+        done < "$RESULT_FILE"
+        
+        # Output tables for each province
+        for province in "${provinces[@]}"; do
+            echo ""
+            echo "| $province | 最快(ms) | 最慢(ms) | 平均(ms) | 丢包率(%) |"
+            echo "|--------|----------|----------|----------|-----------|"
+            echo "${province_lines[$province]}"
         done
-        echo ""
-        echo "## Top 10 Slowest Nodes"
-        echo ""
-        echo "| Province | ISP | Address | Avg(ms) | Min(ms) | Max(ms) | Success(%) |"
-        echo "|----------|-----|---------|---------|---------|---------|------------|"
-        tail -n +2 "$RESULT_FILE" | sort -t',' -k4 -n | tail -n 10 | while IFS=',' read -r province isp address avg min max success; do
-            echo "| $province | $isp | $address | $avg | $min | $max | $success |"
-        done
-        echo ""
-        echo "## All Results (sorted by latency)"
-        echo ""
-        echo "| Province | ISP | Address | Avg(ms) | Min(ms) | Max(ms) | Success(%) |"
-        echo "|----------|-----|---------|---------|---------|---------|------------|"
-        tail -n +2 "$RESULT_FILE" | sort -t',' -k4 -n | while IFS=',' read -r province isp address avg min max success; do
-            echo "| $province | $isp | $address | $avg | $min | $max | $success |"
-        done
+        
         echo ""
         echo "---"
         echo ""
-        echo "**Total Nodes Tested:** $(tail -n +2 "$RESULT_FILE" | wc -l)"
-        echo ""
-        # Calculate statistics
-        local total_avg=$(tail -n +2 "$RESULT_FILE" | cut -d',' -f4 | awk '{sum+=$1; count++} END {if(count>0) printf "%.2f", sum/count; else print "0"}')
-        echo "**Average Latency (all nodes):** ${total_avg}ms"
+        echo "**测试说明:**"
+        echo "- 每个节点测试 $PING_COUNT 次"
+        echo "- 超时时间: ${TIMEOUT}秒"
+        echo "- 测试时间: $timestamp"
     } > "$MD_FILE"
 }
-
 
 # Function to display usage
 usage() {
     cat << EOF
-Usage: $0 [OPTIONS]
+使用方法: $0 [选项]
 
-Options:
-    -c, --count NUM     Number of pings per endpoint (default: 10)
-    -t, --timeout SEC   Timeout for each ping in seconds (default: 5)
-    -f, --file FILE     Path to map.json file (default: map.json)
-    -h, --help          Display this help message
+选项:
+    -c, --count NUM     每个节点 ping 次数 (默认: 10)
+    -t, --timeout SEC   每次 ping 超时时间(秒) (默认: 5)
+    -f, --file FILE     map.json 文件路径 (默认: map.json)
+    --test              测试模式,只测试前 $TEST_PROVINCE_COUNT 个省份
+    -h, --help          显示此帮助信息
 
-Examples:
-    $0                  # Run with default settings
-    $0 -c 5             # Ping each endpoint 5 times
-    $0 -c 20 -t 10      # Ping 20 times with 10s timeout
+示例:
+    $0                  # 使用默认设置运行
+    $0 -c 5             # 每个节点 ping 5 次
+    $0 --test           # 测试模式,只测试前 3 个省份
+    $0 -c 20 -t 10      # ping 20 次,超时 10 秒
 
 EOF
     exit 0
@@ -343,11 +330,15 @@ while [[ $# -gt 0 ]]; do
             MAP_FILE="$2"
             shift 2
             ;;
+        --test)
+            TEST_MODE=true
+            shift
+            ;;
         -h|--help)
             usage
             ;;
         *)
-            print_color "$RED" "Unknown option: $1"
+            print_color "$RED" "未知选项: $1"
             usage
             ;;
     esac
@@ -356,95 +347,115 @@ done
 # Main script
 main() {
     print_color "$CYAN" "\n========================================"
-    print_color "$CYAN" "  TCP Ping Test Tool"
-    print_color "$CYAN" "========================================"
-    echo ""
+    print_color "$CYAN" "  TCP Ping 测试工具"
+    print_color "$CYAN" "========================================\n"
     
-    # Check dependencies
-    check_dependencies
+    # Check dependencies (silent mode)
+    local missing_deps=()
+    local required_deps=("jq" "bc")
+    
+    for dep in "${required_deps[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            missing_deps+=("$dep")
+        fi
+    done
+    
+    if [ ${#missing_deps[@]} -gt 0 ]; then
+        print_color "$YELLOW" "正在安装缺失的依赖: ${missing_deps[*]}"
+        if install_dependencies "${missing_deps[@]}"; then
+            print_color "$GREEN" "依赖安装成功!\n"
+        else
+            print_color "$RED" "依赖安装失败,请手动安装"
+            exit 1
+        fi
+    fi
     
     # Download map file if needed
     download_map_file
     
     # Check if map.json exists
     if [ ! -f "$MAP_FILE" ]; then
-        print_color "$RED" "Error: $MAP_FILE not found"
+        print_color "$RED" "错误: 找不到文件 $MAP_FILE"
         exit 1
     fi
     
     # Create result files
     local timestamp=$(date +%Y%m%d-%H%M%S)
-    RESULT_FILE="tcp-ping-results-${timestamp}.csv"
-    TXT_FILE="tcp-ping-results-${timestamp}.txt"
+    RESULT_FILE="tcp-ping-results-${timestamp}.txt"
     MD_FILE="tcp-ping-results-${timestamp}.md"
-    echo "Province,ISP,Address,Avg(ms),Min(ms),Max(ms),Success(%)" > "$RESULT_FILE"
-
     
     # Get total number of provinces
     local total_provinces=$(jq '. | length' "$MAP_FILE")
-    print_color "$GREEN" "Loaded $MAP_FILE with $total_provinces provinces"
-    print_color "$YELLOW" "Testing each endpoint $PING_COUNT times with ${TIMEOUT}s timeout\n"
+    
+    if [ "$TEST_MODE" = true ]; then
+        total_provinces=$TEST_PROVINCE_COUNT
+        print_color "$YELLOW" "测试模式: 只测试前 $total_provinces 个省份"
+    fi
+    
+    print_color "$GREEN" "开始测试 $total_provinces 个省份,每个节点 $PING_COUNT 次\n"
+    
+    # Clear result file
+    > "$RESULT_FILE"
     
     # Read and process each province
     local province_count=0
     while IFS= read -r province_data; do
         province_count=$((province_count + 1))
         
+        # Stop if in test mode and reached limit
+        if [ "$TEST_MODE" = true ] && [ $province_count -gt $TEST_PROVINCE_COUNT ]; then
+            break
+        fi
+        
         local province=$(echo "$province_data" | jq -r '.province')
-        local unicom=$(echo "$province_data" | jq -r '.unicom // empty')
-        local mobile=$(echo "$province_data" | jq -r '.mobile // empty')
-        local telecom=$(echo "$province_data" | jq -r '.telecom // empty')
+        local unicom=$(echo "$province_data" | jq -r '.["联通"] // .unicom // empty')
+        local mobile=$(echo "$province_data" | jq -r '.["移动"] // .mobile // empty')
+        local telecom=$(echo "$province_data" | jq -r '.["电信"] // .telecom // empty')
         
-        print_color "$YELLOW" "\n========== [$province_count/$total_provinces] $province =========="
+        print_color "$YELLOW" "[$province_count/$total_provinces] $province"
         
-        # Test Unicom
+        # Test each ISP and save results
         if [ -n "$unicom" ]; then
-            test_endpoint "$unicom" "$province" "Unicom"
+            result=$(test_endpoint "$unicom" "$province" "联通")
+            echo "$result" >> "$RESULT_FILE"
         fi
         
-        # Test Mobile
         if [ -n "$mobile" ]; then
-            test_endpoint "$mobile" "$province" "Mobile"
+            result=$(test_endpoint "$mobile" "$province" "移动")
+            echo "$result" >> "$RESULT_FILE"
         fi
         
-        # Test Telecom
         if [ -n "$telecom" ]; then
-            test_endpoint "$telecom" "$province" "Telecom"
+            result=$(test_endpoint "$telecom" "$province" "电信")
+            echo "$result" >> "$RESULT_FILE"
         fi
     done < <(jq -c '.[]' "$MAP_FILE")
     
-    # Display summary
-    print_color "$CYAN" "\n\n========================================"
-    print_color "$CYAN" "  Test Summary"
-    print_color "$CYAN" "========================================"
-    echo ""
+    # Display summary in terminal
+    print_color "$CYAN" "\n========================================"
+    print_color "$CYAN" "  测试结果"
+    print_color "$CYAN" "========================================\n"
     
-    # Sort results and display top/bottom 10
-    if [ -f "$RESULT_FILE" ] && [ $(wc -l < "$RESULT_FILE") -gt 1 ]; then
-        print_color "$GREEN" "Top 10 Fastest Nodes:"
-        echo ""
-        (head -n 1 "$RESULT_FILE" && tail -n +2 "$RESULT_FILE" | sort -t',' -k4 -n | head -n 10) | column -t -s','
-        
-        echo ""
-        print_color "$YELLOW" "Top 10 Slowest Nodes:"
-        echo ""
-        (head -n 1 "$RESULT_FILE" && tail -n +2 "$RESULT_FILE" | sort -t',' -k4 -n | tail -n 10) | column -t -s','
-        
-        # Generate TXT and Markdown reports
-        generate_reports
-        
-        echo ""
-        print_color "$GREEN" "Results saved to:"
-        print_color "$GREEN" "  - CSV: $RESULT_FILE"
-        print_color "$GREEN" "  - TXT: $TXT_FILE"
-        print_color "$GREEN" "  - Markdown: $MD_FILE"
-    else
-        print_color "$RED" "No successful test results"
-    fi
+    # Display results grouped by province
+    local current_province=""
+    while IFS='|' read -r province isp min max avg loss; do
+        if [ "$province" != "$current_province" ]; then
+            if [ -n "$current_province" ]; then
+                echo ""
+            fi
+            current_province="$province"
+            print_color "$YELLOW" "$province"
+            printf "%-8s %-10s %-10s %-10s %-10s\n" "运营商" "最快(ms)" "最慢(ms)" "平均(ms)" "丢包率(%)"
+            printf "%-8s %-10s %-10s %-10s %-10s\n" "------" "--------" "--------" "--------" "---------"
+        fi
+        printf "%-8s %-10s %-10s %-10s %-10s\n" "$isp" "$min" "$max" "$avg" "$loss"
+    done < "$RESULT_FILE"
+    
+    # Generate markdown report
+    generate_markdown_report
     
     echo ""
-    print_color "$CYAN" "Test completed!"
-    echo ""
+    print_color "$GREEN" "\n结果已保存: $MD_FILE\n"
 }
 
 # Run main function
