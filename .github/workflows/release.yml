@@ -1,0 +1,114 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Cross-Platform Binaries
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Get version
+        id: version
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION=dev-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build binaries
+        run: |
+          # Create dist directory
+          mkdir -p dist
+          
+          # Build for all platforms
+          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o dist/cnping-linux-amd64 main.go
+          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o dist/cnping-linux-arm64 main.go
+          GOOS=linux GOARCH=386 go build -ldflags="-s -w" -o dist/cnping-linux-386 main.go
+          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o dist/cnping-darwin-amd64 main.go
+          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o dist/cnping-darwin-arm64 main.go
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o dist/cnping-windows-amd64.exe main.go
+          GOOS=windows GOARCH=386 go build -ldflags="-s -w" -o dist/cnping-windows-386.exe main.go
+          
+          # List built files
+          ls -lh dist/
+
+      - name: Generate checksums
+        run: |
+          cd dist
+          sha256sum * > checksums.txt
+          cat checksums.txt
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/*
+          body: |
+            ## CNPing ${{ steps.version.outputs.VERSION }}
+            
+            ### 下载说明
+            
+            请根据您的操作系统和架构选择对应的文件:
+            
+            | 操作系统 | 架构 | 文件名 |
+            |---------|------|--------|
+            | Linux | AMD64 | cnping-linux-amd64 |
+            | Linux | ARM64 | cnping-linux-arm64 |
+            | Linux | 386 | cnping-linux-386 |
+            | macOS | AMD64 (Intel) | cnping-darwin-amd64 |
+            | macOS | ARM64 (Apple Silicon) | cnping-darwin-arm64 |
+            | Windows | AMD64 | cnping-windows-amd64.exe |
+            | Windows | 386 | cnping-windows-386.exe |
+            
+            ### 使用方法
+            
+            **Linux/macOS:**
+            ```bash
+            # 下载后添加执行权限
+            chmod +x cnping-*
+            ./cnping-* --test
+            ```
+            
+            **Windows:**
+            ```cmd
+            cnping-windows-amd64.exe --test
+            ```
+            
+            ### 一键运行
+            
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash
+            ```
+            
+            ### 校验和
+            
+            请查看 `checksums.txt` 文件验证下载的文件完整性。
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cnping-binaries-${{ steps.version.outputs.VERSION }}
+          path: dist/*
+          retention-days: 30

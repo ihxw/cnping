@@ -2,55 +2,58 @@
 
 一个用于测试中国各省份网络节点延迟的 TCP Ping 工具,支持 IPv4 和 IPv6 双栈测试。
 
-## 快速开始
+[![CI](https://github.com/ihxw/cnping/actions/workflows/ci.yml/badge.svg)](https://github.com/ihxw/cnping/actions/workflows/ci.yml)
+[![Release](https://github.com/ihxw/cnping/actions/workflows/release.yml/badge.svg)](https://github.com/ihxw/cnping/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go Version](https://img.shields.io/badge/Go-1.21+-blue.svg)](https://golang.org)
 
-### 一键运行(Linux/macOS)
+## ✨ 特性
 
-**完整测试(所有省份):**
+- 🌐 **双栈测试**: 自动测试 IPv4 和 IPv6 网络
+- 📊 **多运营商**: 支持联通、移动、电信三大运营商
+- 📝 **自动报告**: 生成 Markdown 格式的测试报告
+- 🎨 **彩色输出**: 清晰易读的终端显示
+- 🚀 **跨平台**: 支持 Linux、macOS、Windows
+- 💻 **多架构**: 支持 AMD64、ARM64、386
+- 🧹 **自动清理**: 测试完成后自动清理临时文件
+- 📍 **智能保存**: 结果保存到脚本调用目录
+
+## 🚀 快速开始
+
+### 一键运行 (推荐)
+
+**Linux / macOS:**
+
 ```bash
+# 完整测试 (所有省份 IPv4 + IPv6)
 curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash
-```
 
-**测试模式(只测试前3个省份):**
-```bash
+# 测试模式 (只测试前3个省份)
 curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash -s -- --test
-```
 
-**自定义参数:**
-```bash
-# 每个节点 ping 20 次,超时 10 秒
+# 自定义参数
 curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash -s -- -c 20 -t 10
-
-# 测试模式 + 自定义参数
-curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash -s -- --test -c 5
 ```
 
-> **说明:** 
-> - 脚本会在系统临时目录中运行
-> - 运行结束后自动清理所有临时文件
-> - 结果文件会保存到脚本调用目录
-> - 最后会显示结果文件的完整路径
-
-### 使用 wget
+**使用 wget:**
 
 ```bash
 wget -qO- https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash
 ```
 
-## 功能特性
+> **工作原理:**
+> - 自动检测系统和架构
+> - 在系统临时目录中下载并运行
+> - 测试完成后自动清理所有临时文件
+> - 结果文件保存到当前目录
+> - 显示结果文件的完整路径
 
-- ✅ **双栈测试**: 自动测试 IPv4 和 IPv6
-- ✅ **多运营商**: 支持联通、移动、电信三大运营商
-- ✅ **自动生成报告**: Markdown 格式的测试报告
-- ✅ **彩色终端输出**: 清晰易读的测试结果
-- ✅ **跨平台**: 支持 Linux、macOS、Windows
-- ✅ **多架构**: 支持 AMD64、ARM64、386
+## 📦 安装方法
 
-## 安装方法
+### 方法 1: 一键脚本 (推荐)
 
-### 方法1: 一键脚本(推荐)
+适合快速测试,无需安装:
 
-**直接运行(推荐):**
 ```bash
 # 完整测试
 curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash
@@ -58,20 +61,13 @@ curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash
 # 测试模式
 curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash -s -- --test
 
-# 自定义参数
+# 自定义参数: 每个节点 ping 20 次,超时 10 秒
 curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash -s -- -c 20 -t 10
 ```
 
-> **特点:**
-> - ✅ 自动检测系统和架构
-> - ✅ 自动下载对应版本
-> - ✅ 在当前目录运行
-> - ✅ 自动清理临时文件
-> - ✅ 只保留测试结果
+### 方法 2: 下载二进制文件
 
-### 方法2: 下载二进制文件
-
-从 [Releases](https://github.com/ihxw/cnping/releases) 页面下载对应平台的二进制文件:
+从 [Releases](https://github.com/ihxw/cnping/releases) 下载对应平台的二进制文件:
 
 **Linux AMD64:**
 ```bash
@@ -94,7 +90,7 @@ chmod +x cnping-darwin-arm64
 cnping-windows-amd64.exe
 ```
 
-### 方法3: 从源码编译
+### 方法 3: 从源码编译
 
 ```bash
 # 克隆仓库
@@ -108,15 +104,15 @@ go build -o cnping main.go
 ./cnping
 ```
 
-## 使用方法
+## 📖 使用说明
 
 ### 基本用法
 
 ```bash
-# 测试所有省份(IPv4 + IPv6)
+# 完整测试 (所有省份 IPv4 + IPv6)
 ./cnping
 
-# 测试模式(只测试前3个省份)
+# 测试模式 (只测试前3个省份)
 ./cnping --test
 
 # 自定义 ping 次数
@@ -126,7 +122,7 @@ go build -o cnping main.go
 ./cnping -t 10
 
 # 指定输出文件名
-./cnping -o result.md
+./cnping -o my-result.md
 
 # 组合使用
 ./cnping --test -c 5 -t 3
@@ -143,14 +139,14 @@ go build -o cnping main.go
 | `--test` | 测试模式,只测试前3个省份 | false |
 | `-h, --help` | 显示帮助信息 | - |
 
-## 输出示例
+## 📊 输出示例
 
 ### 终端输出
 
 ```
-========================================
+=========================================
   TCP Ping 测试工具
-========================================
+=========================================
 
 开始测试 30 个省份,每个节点 10 次
 
@@ -177,45 +173,47 @@ go build -o cnping main.go
 河北
 运营商       最快(ms)   最慢(ms)   平均(ms)   丢包率(%)
 ----------   --------   --------   --------   ---------
-联通-IPv4    182        238        202.30     0.00
-移动-IPv4    246        3304       773.20     0.00
-电信-IPv4    180        334        209.30     0.00
+联通-IPv4    63         123        73.30      0.00
+移动-IPv4    92         330        125.00     0.00
+电信-IPv4    58         1088       171.60     0.00
 
 === IPv6 结果 ===
 
 河北
 运营商       最快(ms)   最慢(ms)   平均(ms)   丢包率(%)
 ----------   --------   --------   --------   ---------
-联通-IPv6    -          -          -          100.00
-移动-IPv6    -          -          -          100.00
-电信-IPv6    -          -          -          100.00
+联通-IPv6    75         1105       390.90     0.00
+移动-IPv6    107        125        113.40     0.00
+电信-IPv6    134        1174       590.89     10.00
+
+结果已保存: tcp-ping-results-20260109-150734.md
 ```
 
 ### Markdown 输出
 
 生成的 Markdown 文件包含两个部分:
 
-**IPv4 测试结果:**
+#### IPv4 测试结果
 
 | 河北 | 最快(ms) | 最慢(ms) | 平均(ms) | 丢包率(%) |
 |--------|----------|----------|----------|-----------|
-| 联通-IPv4 | 182 | 238 | 202.30 | 0.00 |
-| 移动-IPv4 | 246 | 3304 | 773.20 | 0.00 |
-| 电信-IPv4 | 180 | 334 | 209.30 | 0.00 |
+| 联通-IPv4 | 63 | 123 | 73.30 | 0.00 |
+| 移动-IPv4 | 92 | 330 | 125.00 | 0.00 |
+| 电信-IPv4 | 58 | 1088 | 171.60 | 0.00 |
 
-**IPv6 测试结果:**
+#### IPv6 测试结果
 
 | 河北 | 最快(ms) | 最慢(ms) | 平均(ms) | 丢包率(%) |
 |--------|----------|----------|----------|-----------|
-| 联通-IPv6 | - | - | - | 100.00 |
-| 移动-IPv6 | - | - | - | 100.00 |
-| 电信-IPv6 | - | - | - | 100.00 |
+| 联通-IPv6 | 75 | 1105 | 390.90 | 0.00 |
+| 移动-IPv6 | 107 | 125 | 113.40 | 0.00 |
+| 电信-IPv6 | 134 | 1174 | 590.89 | 10.00 |
 
-## 开发
+## 🛠️ 开发
 
 ### 编译全平台版本
 
-**Linux/macOS:**
+**Linux / macOS:**
 ```bash
 chmod +x build.sh
 ./build.sh
@@ -230,13 +228,19 @@ build.bat
 
 ### 支持的平台
 
-- Linux (AMD64, ARM64, 386)
-- macOS (AMD64, ARM64)
-- Windows (AMD64, 386)
+| 操作系统 | 架构 | 文件名 |
+|---------|------|--------|
+| Linux | AMD64 | cnping-linux-amd64 |
+| Linux | ARM64 | cnping-linux-arm64 |
+| Linux | 386 | cnping-linux-386 |
+| macOS | AMD64 | cnping-darwin-amd64 |
+| macOS | ARM64 | cnping-darwin-arm64 |
+| Windows | AMD64 | cnping-windows-amd64.exe |
+| Windows | 386 | cnping-windows-386.exe |
 
-## 数据文件
+## 📁 数据文件
 
-`map.json` 文件包含了各省份的测试节点地址,格式如下:
+`map.json` 文件包含了各省份的测试节点地址:
 
 ```json
 [
@@ -251,35 +255,89 @@ build.bat
 
 程序会自动将 `-v4.ip` 替换为 `-v6.ip` 进行 IPv6 测试。
 
-## 常见问题
+## ❓ 常见问题
 
-**Q: IPv6 测试全部失败怎么办?**
+### Q: IPv6 测试全部失败怎么办?
 
 A: 这可能是因为:
-1. 您的网络不支持 IPv6
-2. IPv6 节点地址不存在
-3. 防火墙阻止了 IPv6 连接
+- 您的网络不支持 IPv6
+- IPv6 节点地址不存在或未配置
+- 防火墙阻止了 IPv6 连接
 
 这是正常现象,程序会正确显示连接失败的情况。
 
-**Q: 如何只测试 IPv4?**
+### Q: 如何只测试 IPv4?
 
-A: 目前程序会自动测试 IPv4 和 IPv6,如果只需要 IPv4 结果,可以在 Markdown 文件中只查看 IPv4 部分。
+A: 目前程序会自动测试 IPv4 和 IPv6。如果只需要 IPv4 结果,可以在生成的 Markdown 文件中只查看 IPv4 部分。
 
-**Q: 可以自定义测试节点吗?**
+### Q: 可以自定义测试节点吗?
 
 A: 可以,修改 `map.json` 文件,添加或修改测试节点地址即可。
 
-## 许可证
+### Q: 测试结果保存在哪里?
 
-MIT License
+A: 
+- 使用一键脚本时,结果保存在**脚本调用目录**(即你运行 curl 命令的目录)
+- 直接运行二进制文件时,结果保存在**当前目录**
+- 文件名格式: `tcp-ping-results-YYYYMMDD-HHMMSS.md`
 
-## 贡献
+### Q: 临时文件会保留吗?
+
+A: 不会。使用一键脚本时:
+- 程序在系统临时目录中运行
+- 测试完成后自动清理所有临时文件
+- 只保留测试结果文件
+
+## 🔧 技术细节
+
+### 工作原理
+
+1. **地址解析**: 从 `map.json` 读取测试节点地址
+2. **IPv4 测试**: 使用 TCP 连接测试 IPv4 节点
+3. **IPv6 测试**: 自动替换地址为 IPv6 并测试
+4. **延迟计算**: 记录每次连接的时间,计算平均值
+5. **结果生成**: 按省份分组,生成 Markdown 报告
+
+### 依赖项
+
+- Go 1.21+ (仅编译时需要)
+- 无运行时依赖 (编译后的二进制文件可独立运行)
+
+## 📄 许可证
+
+MIT License - 详见 [LICENSE](LICENSE) 文件
+
+## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request!
 
-## 相关链接
+### 贡献指南
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启 Pull Request
+
+## 🔗 相关链接
 
 - [GitHub 仓库](https://github.com/ihxw/cnping)
 - [问题反馈](https://github.com/ihxw/cnping/issues)
 - [发布页面](https://github.com/ihxw/cnping/releases)
+
+## 📝 更新日志
+
+### v1.0.0 (2026-01-09)
+
+- ✅ 支持 IPv4 和 IPv6 双栈测试
+- ✅ 支持三大运营商节点测试
+- ✅ 自动生成 Markdown 报告
+- ✅ 跨平台支持 (Linux, macOS, Windows)
+- ✅ 多架构支持 (AMD64, ARM64, 386)
+- ✅ 一键运行脚本
+- ✅ 自动清理临时文件
+- ✅ 彩色终端输出
+
+---
+
+**Made with ❤️ by [ihxw](https://github.com/ihxw)**
