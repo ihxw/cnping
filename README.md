@@ -65,31 +65,6 @@ curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash 
 curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash -s -- -c 20 -t 10
 ```
 
-### 方法 2: 下载二进制文件
-
-从 [Releases](https://github.com/ihxw/cnping/releases) 下载对应平台的二进制文件:
-
-**Linux AMD64:**
-```bash
-wget https://github.com/ihxw/cnping/releases/latest/download/cnping-linux-amd64
-chmod +x cnping-linux-amd64
-./cnping-linux-amd64
-```
-
-**macOS ARM64 (Apple Silicon):**
-```bash
-wget https://github.com/ihxw/cnping/releases/latest/download/cnping-darwin-arm64
-chmod +x cnping-darwin-arm64
-./cnping-darwin-arm64
-```
-
-**Windows:**
-
-下载 `cnping-windows-amd64.exe` 并双击运行,或在命令行中运行:
-```cmd
-cnping-windows-amd64.exe
-```
-
 ### 方法 3: 从源码编译
 
 ```bash
