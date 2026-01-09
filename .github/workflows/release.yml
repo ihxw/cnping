@@ -61,10 +61,11 @@ jobs:
         with:
           files: |
             dist/*
+          generate_release_notes: true
           body: |
             ## CNPing ${{ steps.version.outputs.VERSION }}
             
-            ### 下载说明
+            ### 📦 下载说明
             
             请根据您的操作系统和架构选择对应的文件:
             
@@ -78,7 +79,7 @@ jobs:
             | Windows | AMD64 | cnping-windows-amd64.exe |
             | Windows | 386 | cnping-windows-386.exe |
             
-            ### 使用方法
+            ### 🚀 使用方法
             
             **Linux/macOS:**
             ```bash
@@ -92,15 +93,19 @@ jobs:
             cnping-windows-amd64.exe --test
             ```
             
-            ### 一键运行
+            ### ⚡ 一键运行
             
             ```bash
             curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash
             ```
             
-            ### 校验和
+            ### 🔐 校验和
             
             请查看 `checksums.txt` 文件验证下载的文件完整性。
+            
+            ---
+            
+            **注意:** 本 Release 只包含编译后的二进制文件,不包含源码。如需源码请访问对应的 tag 或 commit。
           draft: false
           prerelease: false
         env:
