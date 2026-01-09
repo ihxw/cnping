@@ -26,9 +26,10 @@ curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash 
 ```
 
 > **说明:** 
-> - 脚本会自动下载并在当前目录运行
-> - 运行结束后自动清理临时文件
-> - 只保留测试结果文件 `tcp-ping-results-*.md`
+> - 脚本会在系统临时目录中运行
+> - 运行结束后自动清理所有临时文件
+> - 结果文件会保存到脚本调用目录
+> - 最后会显示结果文件的完整路径
 
 ### 使用 wget
 

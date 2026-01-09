@@ -2,12 +2,18 @@
 
 # CNPing 一键下载运行脚本
 # 自动检测系统架构,下载对应版本并运行
-# 运行结束后自动清理临时文件,只保留测试结果
+# 在临时目录中运行,结束后将结果保存到调用目录并清理临时文件
 
 set -e
 
 GITHUB_REPO="ihxw/cnping"
 VERSION="latest"
+
+# 保存原始工作目录
+ORIGINAL_DIR="$(pwd)"
+
+# 临时目录变量
+TEMP_DIR=""
 
 # 颜色定义
 RED='\033[0;31m'
@@ -55,6 +61,24 @@ detect_arch() {
     esac
 }
 
+# 创建临时目录
+create_temp_dir() {
+    # 尝试使用系统临时目录
+    if [ -n "$TMPDIR" ]; then
+        # macOS 使用 TMPDIR
+        TEMP_DIR=$(mktemp -d "$TMPDIR/cnping.XXXXXX")
+    elif [ -d "/tmp" ]; then
+        # Linux 使用 /tmp
+        TEMP_DIR=$(mktemp -d /tmp/cnping.XXXXXX)
+    else
+        # 如果都不存在,在当前目录创建
+        TEMP_DIR="${ORIGINAL_DIR}/.cnping_tmp_$$"
+        mkdir -p "$TEMP_DIR"
+    fi
+    
+    echo -e "${GREEN}临时目录: ${TEMP_DIR}${NC}"
+}
+
 # 下载文件
 download_file() {
     local url=$1
@@ -77,29 +101,39 @@ cleanup() {
     echo ""
     echo -e "${YELLOW}正在清理临时文件...${NC}"
     
-    # 删除下载的二进制文件
-    [ -f "cnping" ] && rm -f "cnping" && echo -e "${GREEN}  ✓ 已删除 cnping${NC}"
-    
-    # 删除下载的 map.json
-    [ -f "map.json" ] && rm -f "map.json" && echo -e "${GREEN}  ✓ 已删除 map.json${NC}"
-    
-    # 删除临时文件
-    [ -f ".cnping.tmp" ] && rm -f ".cnping.tmp"
-    
-    echo ""
-    
-    # 检查是否有结果文件
-    if ls tcp-ping-results-*.md 1> /dev/null 2>&1; then
-        echo -e "${GREEN}=========================================${NC}"
-        echo -e "${GREEN}  测试完成!${NC}"
-        echo -e "${GREEN}=========================================${NC}"
+    # 复制结果文件到原始目录
+    if [ -n "$TEMP_DIR" ] && [ -d "$TEMP_DIR" ]; then
+        cd "$TEMP_DIR"
+        
+        # 查找并复制结果文件
+        local result_files=()
+        if ls tcp-ping-results-*.md 1> /dev/null 2>&1; then
+            for file in tcp-ping-results-*.md; do
+                cp "$file" "$ORIGINAL_DIR/"
+                result_files+=("$file")
+            done
+        fi
+        
+        # 删除整个临时目录
+        cd "$ORIGINAL_DIR"
+        rm -rf "$TEMP_DIR"
+        echo -e "${GREEN}  ✓ 已清理临时目录${NC}"
+        
         echo ""
-        echo -e "${CYAN}结果文件:${NC}"
-        for file in tcp-ping-results-*.md; do
-            echo -e "${GREEN}  ✓ $file${NC}"
-        done
-        echo ""
-        echo -e "${YELLOW}提示: 结果文件已保存在当前目录${NC}"
+        
+        # 显示结果
+        if [ ${#result_files[@]} -gt 0 ]; then
+            echo -e "${GREEN}=========================================${NC}"
+            echo -e "${GREEN}  测试完成!${NC}"
+            echo -e "${GREEN}=========================================${NC}"
+            echo ""
+            echo -e "${CYAN}结果文件已保存到:${NC}"
+            for file in "${result_files[@]}"; do
+                local full_path="${ORIGINAL_DIR}/${file}"
+                echo -e "${GREEN}  ✓ ${full_path}${NC}"
+            done
+            echo ""
+        fi
     fi
     
     # 如果是错误退出,显示错误信息
@@ -122,12 +156,18 @@ main() {
     echo -e "${GREEN}检测到系统: ${os}/${arch}${NC}"
     echo ""
     
+    # 创建临时目录
+    create_temp_dir
+    
+    # 切换到临时目录
+    cd "$TEMP_DIR"
+    
     # 下载 URL
     local download_url="https://github.com/${GITHUB_REPO}/releases/latest/download/${binary_name}"
     
     echo -e "${YELLOW}正在下载 cnping...${NC}"
     
-    # 下载二进制文件到当前目录
+    # 下载二进制文件
     if download_file "$download_url" "cnping"; then
         echo -e "${GREEN}  ✓ cnping 下载成功${NC}"
     else
@@ -141,7 +181,7 @@ main() {
         echo -e "${GREEN}  ✓ cnping 下载成功${NC}"
     fi
     
-    # 下载 map.json 到当前目录
+    # 下载 map.json
     echo -e "${YELLOW}正在下载 map.json...${NC}"
     if download_file "https://raw.githubusercontent.com/${GITHUB_REPO}/main/map.json" "map.json"; then
         echo -e "${GREEN}  ✓ map.json 下载成功${NC}"
@@ -191,9 +231,10 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
     echo "  curl -fsSL https://raw.githubusercontent.com/ihxw/cnping/main/install.sh | bash -s -- --test -c 5"
     echo ""
     echo "说明:"
-    echo "  - 程序会在当前目录下载并运行"
-    echo "  - 运行结束后自动清理临时文件"
-    echo "  - 只保留测试结果文件 (tcp-ping-results-*.md)"
+    echo "  - 程序会在系统临时目录中运行"
+    echo "  - 运行结束后自动清理所有临时文件"
+    echo "  - 结果文件会保存到脚本调用目录"
+    echo "  - 最后会显示结果文件的完整路径"
     echo ""
     exit 0
 fi
