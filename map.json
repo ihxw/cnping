@@ -1,188 +1,188 @@
 [
   {
     "province": "河北",
-    "unicom": "he-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "he-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "he-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "he-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "he-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "he-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "山西",
-    "unicom": "sx-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "sx-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "sx-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "sx-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "sx-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "sx-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "辽宁",
-    "unicom": "ln-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "ln-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "ln-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "ln-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "ln-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "ln-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "吉林",
-    "unicom": "jl-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "jl-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "jl-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "jl-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "jl-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "jl-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "黑龙江",
-    "unicom": "hl-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "hl-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "hl-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "hl-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "hl-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "hl-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "江苏",
-    "unicom": "js-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "js-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "js-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "js-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "js-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "js-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "浙江",
-    "unicom": "zj-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "zj-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "zj-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "zj-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "zj-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "zj-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "安徽",
-    "unicom": "ah-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "ah-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "ah-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "ah-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "ah-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "ah-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "福建",
-    "unicom": "fj-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "fj-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "fj-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "fj-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "fj-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "fj-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "江西",
-    "unicom": "jx-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "jx-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "jx-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "jx-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "jx-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "jx-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "山东",
-    "unicom": "sd-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "sd-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "sd-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "sd-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "sd-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "sd-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "河南",
-    "unicom": "ha-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "ha-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "ha-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "ha-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "ha-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "ha-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "湖北",
-    "unicom": "hb-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "hb-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "hb-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "hb-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "hb-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "hb-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "湖南",
-    "unicom": "hn-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "hn-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "hn-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "hn-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "hn-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "hn-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "广东",
-    "unicom": "gd-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "gd-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "gd-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "gd-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "gd-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "gd-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "海南",
-    "unicom": "hi-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "hi-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "hi-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "hi-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "hi-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "hi-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "四川",
-    "unicom": "sc-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "sc-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "sc-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "sc-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "sc-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "sc-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "贵州",
-    "unicom": "gz-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "gz-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "gz-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "gz-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "gz-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "gz-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "云南",
-    "unicom": "yn-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "yn-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "yn-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "yn-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "yn-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "yn-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "陕西",
-    "unicom": "sn-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "sn-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "sn-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "sn-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "sn-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "sn-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "甘肃",
-    "unicom": "gs-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "gs-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "gs-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "gs-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "gs-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "gs-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "青海",
-    "unicom": "qh-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "qh-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "qh-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "qh-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "qh-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "qh-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "内蒙古",
-    "unicom": "nm-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "nm-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "nm-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "nm-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "nm-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "nm-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "广西",
-    "unicom": "gx-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "gx-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "gx-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "gx-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "gx-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "gx-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "西藏",
-    "unicom": "xz-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "xz-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "xz-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "xz-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "xz-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "xz-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "宁夏",
-    "unicom": "nx-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "nx-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "nx-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "nx-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "nx-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "nx-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "新疆",
-    "unicom": "xj-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "xj-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "xj-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "xj-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "xj-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "xj-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "北京",
-    "unicom": "bj-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "bj-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "bj-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "bj-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "bj-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "bj-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "天津",
-    "unicom": "tj-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "tj-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "tj-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "tj-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "tj-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "tj-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "上海",
-    "unicom": "sh-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "sh-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "sh-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "sh-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "sh-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "sh-ct-v4.ip.zstaticcdn.com:80"
   },
   {
     "province": "重庆",
-    "unicom": "cq-cu-v4.ip.zstaticcdn.com:80",
-    "mobile": "cq-cm-v4.ip.zstaticcdn.com:80",
-    "telecom": "cq-ct-v4.ip.zstaticcdn.com:80"
+    "联通": "cq-cu-v4.ip.zstaticcdn.com:80",
+    "移动": "cq-cm-v4.ip.zstaticcdn.com:80",
+    "电信": "cq-ct-v4.ip.zstaticcdn.com:80"
   }
 ]
